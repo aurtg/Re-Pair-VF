@@ -25,8 +25,8 @@ txt2enc: main.c repair.o encoder.o bits.o
 enc2txt: main.c decoder.o bits.o
 	$(CC) $(CFLAGS) -DENC2TXT -o $@ main.c decoder.o bits.o $(LIB)
 
-txt2cfg: main.c repair.o
-	$(CC) $(CFLAGS) -DTXT2CFG -o $@ main.c repair.o $(LIB)
+txt2cfg: main.c repair.o chartable.o
+	$(CC) $(CFLAGS) -DTXT2CFG -o $@ main.c repair.o chartable.o $(LIB)
 
 cfg2txt: cfg2txt.o
 	$(CC) $(CFLAGS) -o $@ cfg2txt.o $(LIB)
@@ -49,4 +49,3 @@ encoder.o: encoder.h basics.h
 decoder.o: decoder.h basics.h
 bits.o: bits.h basics.h
 bitfs.o: bitfs.h
-

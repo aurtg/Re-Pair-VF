@@ -1,10 +1,10 @@
-/* 
+/*
  *  Copyright (c) 2011 Shirou Maruyama
- * 
+ *
  *   Redistribution and use in source and binary forms, with or without
  *   modification, are permitted provided that the following conditions
  *   are met:
- * 
+ *
  *   1. Redistributions of source code must retain the above Copyright
  *      notice, this list of conditions and the following disclaimer.
  *
@@ -43,7 +43,7 @@ EDICT *convertDict(DICT *dict, USEDCHARTABLE *ut)
   for(i = CHAR_SIZE; i < dict->num_rules; i++){
     edict->tcode[i] = code++;
   }
-  
+
   free(dict);
   return edict;
 }
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     exit(1);
   }
   target_filename = argv[1];
-  
+
   input  = fopen(target_filename, "r");
   if (input == NULL) {
     puts("File open error at the beginning.");
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 	   "Restore <output filename> from <input filename>\n\n", argv[0]);
     exit(1);
   }
-  
+
   //strcpy(input_filename, argv[1]);
   //strcat(input_filename, ".rp");
   input_filename = argv[1];
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
   }
   target_filename = argv[1];
   output_filename = argv[2];
-  
+
   input  = fopen(target_filename, "r");
   output = fopen(output_filename, "wb");
   if (input == NULL || output == NULL) {
@@ -207,6 +207,7 @@ int main(int argc, char *argv[])
 
 #ifdef TXT2CFG
 #include "repair.h"
+#include "chartable.h"
 
 int main(int argc, char *argv[])
 {
@@ -214,6 +215,7 @@ int main(int argc, char *argv[])
   char *output_filename;
   FILE *input, *output;
   DICT *dict;
+  USEDCHARTABLE ut;
 
   if (argc != 3) {
     printf("usage: %s target_text_file output_file\n", argv[0]);
@@ -221,7 +223,7 @@ int main(int argc, char *argv[])
   }
   target_filename = argv[1];
   output_filename = argv[2];
-  
+
   input  = fopen(target_filename, "r");
   output = fopen(output_filename, "wb");
   if (input == NULL || output == NULL) {
@@ -229,7 +231,8 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  dict = RunRepair(input);
+  chartable_init(&ut);
+  dict = RunRepair(input, &ut);
   OutputGeneratedCFG(dict, output);
   DestructDict(dict);
 

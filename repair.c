@@ -75,7 +75,7 @@ void reconstructHash(RDS *rds)
   uint i, h;
 
   rds->h_num++;
-  rds->h_first =  
+  rds->h_first =
     (PAIR**)realloc(rds->h_first, sizeof(PAIR*)*primes[rds->h_num]);
   for (i = 0; i < primes[rds->h_num]; i++) {
     rds->h_first[i] = NULL;
@@ -117,7 +117,7 @@ void removePair_PQ(RDS *rds, PAIR *target, uint p_num)
   if (p_num >= rds->p_max) {
     p_num = 0;
   }
-  
+
   if (target->p_prev == NULL) {
     rds->p_que[p_num] = target->p_next;
     if (target->p_next != NULL) {
@@ -151,7 +151,7 @@ void decrementPair(RDS *rds, PAIR *target)
     target->freq--;
     return;
   }
-  
+
   if (target->freq == 1) {
     destructPair(rds, target);
   }
@@ -185,7 +185,7 @@ PAIR *createPair(RDS *rds, CODE left, CODE right, uint f_pos)
   q = rds->h_first[h];
   rds->h_first[h] = pair;
   pair->h_next = q;
-  
+
   insertPair_PQ(rds, pair, 1);
 
   return pair;
@@ -298,7 +298,7 @@ RDS *createRDS(FILE *input, USEDCHARTABLE *ut)
   for (i = 0; i < p_max; i++) {
     p_que[i] = NULL;
   }
-  
+
   rds = (RDS*)malloc(sizeof(RDS));
   rds->txt_len = size_w;
   rds->seq = seq;
@@ -460,7 +460,7 @@ void updateBlock_SQ(RDS *rds, CODE new_code, uint target_pos)
   removeLink_SQ(rds, r_pos);
   seq[target_pos].code = new_code;
   seq[r_pos].code = DUMMY_CODE;
-  
+
   if (rr_pos != DUMMY_POS) {
     rr_code = seq[rr_pos].code;
     assert(rr_code != DUMMY_CODE);
@@ -487,7 +487,7 @@ void updateBlock_SQ(RDS *rds, CODE new_code, uint target_pos)
 	seq[target_pos+2].prev = seq[target_pos+2].next = DUMMY_POS;
       }
     }
-    if (seq[rr_pos-2].code == DUMMY_CODE) { 
+    if (seq[rr_pos-2].code == DUMMY_CODE) {
       if (rr_pos-2 > target_pos+1) {
 	seq[rr_pos-2].prev = seq[rr_pos-2].next = DUMMY_POS;
       }
@@ -535,8 +535,8 @@ uint replacePairs(RDS *rds, PAIR *max_pair, CODE new_code)
     num_replaced++;
   }
 
-  if (max_pair->freq != 1) { 
-    destructPair(rds, max_pair); 
+  if (max_pair->freq != 1) {
+    destructPair(rds, max_pair);
   }
   resetPQ(rds, 1);
   return num_replaced;
@@ -681,7 +681,6 @@ void OutputGeneratedCFG(DICT *dict, FILE *output)
   fwrite(&txt_len, sizeof(uint), 1, output);
   fwrite(&num_rules, sizeof(uint), 1, output);
   fwrite(&seq_len, sizeof(uint), 1, output);
-  fwrite(dict->rule+CHAR_SIZE+1, sizeof(RULE), num_rules-(CHAR_SIZE+1), output);
+  fwrite(dict->rule+CHAR_SIZE, sizeof(RULE), num_rules-(CHAR_SIZE), output);
   fwrite(dict->comp_seq, sizeof(CODE), seq_len, output);
 }
-
